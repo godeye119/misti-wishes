@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sky Lantern Performance Test</title>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="fps" style="position:fixed;top:10px;right:10px;color:white;background:rgba(0,0,0,0.7);padding:15px 20px;font-family:monospace;font-size:18px;border-radius:8px;z-index:1000;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);">
+    FPS: <span id="fps-value">--</span>
+  </div>
+  <script type="module" src="/src/main.jsx"></script>
+  <script>
+    let lastTime = performance.now();
+    let frames = 0;
+    function measureFPS() {
+      frames++;
+      const now = performance.now();
+      if (now >= lastTime + 1000) {
+        const fps = Math.round((frames * 1000) / (now - lastTime));
+        const fpsElement = document.getElementById('fps-value');
+        fpsElement.textContent = fps;
+        
+        // Color code based on performance
+        if (fps >= 55) {
+          fpsElement.style.color = '#4ade80'; // Green
+        } else if (fps >= 30) {
+          fpsElement.style.color = '#fbbf24'; // Yellow
+        } else {
+          fpsElement.style.color = '#ef4444'; // Red
+        }
+        
+        frames = 0;
+        lastTime = now;
+      }
+      requestAnimationFrame(measureFPS);
+    }
+    measureFPS();
+  </script>
+</body>
+</html>
